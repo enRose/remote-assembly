@@ -1,16 +1,31 @@
 'use client'
 import { Button, Textarea } from '@nextui-org/react'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
+
+export interface IChat {
+  messages: IMessage[]
+  id: string
+}
+
+export interface IMessage {
+  role: string
+  content: any
+}
 
 export const Input = () => {
   const [res, setRes] = useState<string | undefined>()
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
 
-    const formData = new FormData(event.currentTarget)
-    const response = await fetch('/api/hello/', {
+  const [value, setValue] = useState('')
+
+  async function send() {
+    const m: IChat = {
+      messages: [{ role: 'user', content: value }],
+      id: `${Math.random()}`
+    }
+
+    const response = await fetch('/api/ask/', {
       method: 'POST',
-      body: formData
+      body: JSON.stringify(m)
     })
 
     const data = await response.text()
@@ -18,21 +33,26 @@ export const Input = () => {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <div className="grid grid-cols-2 content-center">
-        <div>
-          <Textarea
-            className="mx-auto sm:max-w-2xl sm:pl-24 sm:pr-4"
-            id="chatInput"
-            maxRows={3}
-            label="Description"
-            placeholder="Enter your description (Max rows 3)"
-          ></Textarea>
-        </div>
-        <div className="self-center">
-          <Button type="submit">Send</Button>
-        </div>
+    <div className="grid grid-cols-4 content-center">
+      <div className="col-span-3">
+        <Textarea
+          className="mx-auto sm:max-w-2xl sm:pl-24 sm:pr-4"
+          id="chatInput"
+          maxRows={3}
+          placeholder="Send a message"
+          value={value}
+          onValueChange={setValue}
+        ></Textarea>
       </div>
-    </form>
+      <div className="self-center">
+        <Button
+          onClick={async e => await send()}
+          color="primary"
+          variant="flat"
+        >
+          Send
+        </Button>
+      </div>
+    </div>
   )
 }

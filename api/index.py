@@ -1,17 +1,21 @@
 import json
-from flask import Flask
+import sys
+from flask import Flask, request
+
 app = Flask(__name__)
 
-@app.route("/api/hello", methods=['POST'])
-def hello_world():
+@app.route("/api/ask", methods=['POST'])
+def ask():
+    print(request.data, file=sys.stderr)
     return "Hello, Yini!"
 
-@app.route("/api/messages", methods=['GET'])
-def messages():
+@app.route("/api/chat", methods=['GET'])
+def chat():
     
-    m = {
-        'usr': 'Hello ai',
-        'bot': 'Hello Yini'
-    }
+    chat = {"messages":[
+        {"role":"user","content":"sdfsdfsd"},
+        {"role":"assistant","content":"I'm sorry, but I don't understand what you're trying to say. Can you please provide more information or rephrase your question?"},
+        {"role":"user","content":"gdgdgdfgdg"}],
+        "id":"lLQ1OeL"}
 
-    return json.dumps(m)
+    return json.dumps(chat)

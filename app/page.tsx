@@ -1,8 +1,8 @@
-import { Avatar, Card, CardBody, Divider, Textarea } from '@nextui-org/react'
-import { Input } from './input'
+import { Avatar, Card, CardBody, Divider } from '@nextui-org/react'
+import { IChat, IMessage, Input } from './input'
 
-const getMessages = async () => {
-  const res = await fetch(`${process.env.ServerUrl}/api/messages`, {
+const getChat = async (): Promise<IChat> => {
+  const res = await fetch(`${process.env.ServerUrl}/api/chat`, {
     method: 'GET'
   })
 
@@ -10,7 +10,7 @@ const getMessages = async () => {
 }
 
 export default async function Home() {
-  const messages = await getMessages()
+  const chat: IChat = await getChat()
   return (
     <main className="flex flex-1 min-h-screen flex-col items-center justify-between p-16">
       <div
@@ -28,99 +28,45 @@ export default async function Home() {
         after:dark:from-sky-900 after:dark:via-[#0141ff] 
         after:dark:opacity-40 before:lg:h-[360px]"
       >
-        <div className="flex space-x-4 text-small">
-          <div>
-            <Avatar
-              isBordered
-              radius="full"
-              size="md"
-              src="/avatars/avatar-1.png"
-            />
-          </div>
-          <Divider orientation="vertical" />
-          <div>
-            <Card>
-              <CardBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-                  ac orci augue. In et commodo eros. Aliquam semper odio arcu,
-                  in aliquet tellus rutrum vel. Aenean ornare eu nunc at
-                  laoreet. Sed a suscipit quam, maximus cursus felis. Nulla ante
-                  tortor, ultrices et pretium in, pharetra eget enim. Maecenas
-                  vel rhoncus justo. Integer dictum velit erat, in mollis arcu
-                  porttitor non. Donec imperdiet quis sem sit amet dapibus.
-                  Suspendisse ut nisl est. Vestibulum sollicitudin, nisl eu
-                  efficitur posuere, dolor odio sagittis nulla, eu laoreet justo
-                  turpis at dui.
-                </p>
-              </CardBody>
-            </Card>
-          </div>
+        <div className="grid gap-y-8 content-start">
+          {chat.messages.map(message => (
+            <Message message={message}></Message>
+          ))}
         </div>
-        <div className="flex space-x-4 text-small">
-          <div>
-            <Avatar
-              isBordered
-              radius="full"
-              size="md"
-              src="/avatars/avatar-1.png"
-            />
-          </div>
-          <Divider orientation="vertical" />
-          <div>
-            <Card>
-              <CardBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-                  ac orci augue. In et commodo eros. Aliquam semper odio arcu,
-                  in aliquet tellus rutrum vel. Aenean ornare eu nunc at
-                  laoreet. Sed a suscipit quam, maximus cursus felis. Nulla ante
-                  tortor, ultrices et pretium in, pharetra eget enim. Maecenas
-                  vel rhoncus justo. Integer dictum velit erat, in mollis arcu
-                  porttitor non. Donec imperdiet quis sem sit amet dapibus.
-                  Suspendisse ut nisl est. Vestibulum sollicitudin, nisl eu
-                  efficitur posuere, dolor odio sagittis nulla, eu laoreet justo
-                  turpis at dui.
-                </p>
-              </CardBody>
-            </Card>
-          </div>
-        </div>
-        <div className="flex space-x-4 text-small">
-          <div>
-            <Avatar
-              isBordered
-              radius="full"
-              size="md"
-              src="/avatars/avatar-1.png"
-            />
-          </div>
-          <Divider orientation="vertical" />
-          <div>
-            <Card>
-              <CardBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-                  ac orci augue. In et commodo eros. Aliquam semper odio arcu,
-                  in aliquet tellus rutrum vel. Aenean ornare eu nunc at
-                  laoreet. Sed a suscipit quam, maximus cursus felis. Nulla ante
-                  tortor, ultrices et pretium in, pharetra eget enim. Maecenas
-                  vel rhoncus justo. Integer dictum velit erat, in mollis arcu
-                  porttitor non. Donec imperdiet quis sem sit amet dapibus.
-                  Suspendisse ut nisl est. Vestibulum sollicitudin, nisl eu
-                  efficitur posuere, dolor odio sagittis nulla, eu laoreet justo
-                  turpis at dui.
-                </p>
-              </CardBody>
-            </Card>
-          </div>
-        </div>
-
         <Divider className="my-4" />
         <div className="w-full ease-in-out bottom-0 space-y-1">
           <Input />
         </div>
       </div>
     </main>
+  )
+}
+
+function Message({ message }: { message: IMessage }) {
+  return (
+    <div key={Math.random().toString()} className="flex space-x-4 text-small">
+      <div className="grow-0">
+        <Avatar
+          isBordered
+          name={message.role === 'user' ? 'user' : 'bot'}
+          radius="lg"
+          size="md"
+          color={message.role === 'user' ? 'default' : 'warning'}
+          src={
+            message.role === 'user'
+              ? ''
+              : 'https://i.pravatar.cc/150?u=a04258114e29026702d'
+          }
+        />
+      </div>
+      <Divider orientation="vertical" />
+      <div>
+        <Card>
+          <CardBody>
+            <p>{message.content}</p>
+          </CardBody>
+        </Card>
+      </div>
+    </div>
   )
 }
