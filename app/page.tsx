@@ -1,5 +1,6 @@
 import { Avatar, Card, CardBody, Divider } from '@nextui-org/react'
 import { IChat, IMessage, Input } from './input'
+import aiYuen from './8-SG0FYEmpV2gXW50.png'
 
 const getChat = async (): Promise<IChat> => {
   const res = await fetch(`${process.env.ServerUrl}/api/chat`, {
@@ -53,9 +54,7 @@ function Message({ message }: { message: IMessage }) {
           size="md"
           color={message.role === 'user' ? 'default' : 'warning'}
           src={
-            message.role === 'user'
-              ? ''
-              : 'https://i.pravatar.cc/150?u=a04258114e29026702d'
+            message.role === 'user' ? '' : aiYuen.src //'https://i.pravatar.cc/150?u=a04258114e29026702d'
           }
         />
       </div>

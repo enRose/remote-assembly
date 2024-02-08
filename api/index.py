@@ -1,8 +1,12 @@
 import json
 import sys
 from flask import Flask, request
+import os
+import getpass
 
 app = Flask(__name__)
+
+# os.environ['OPENAI_API_KEY'] = getpass.getpass('OpenAI API Key:')
 
 @app.route("/api/ask", methods=['POST'])
 def ask():
