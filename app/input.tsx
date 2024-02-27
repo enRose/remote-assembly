@@ -8,7 +8,7 @@ export interface IChat {
 }
 
 export interface IMessage {
-  role: string
+  role?: string
   content: any
 }
 
@@ -18,17 +18,15 @@ export const Input = () => {
   const [value, setValue] = useState('')
 
   async function send() {
-    const m: IChat = {
-      messages: [{ role: 'user', content: value }],
-      id: `${Math.random()}`
-    }
-
     const response = await fetch('/api/ask/', {
       method: 'POST',
-      body: JSON.stringify(m)
+      body: value
     })
 
-    const data = await response.text()
+    const data = await response.json()
+
+    console.log(data)
+
     setRes(data)
   }
 

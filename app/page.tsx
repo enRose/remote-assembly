@@ -3,11 +3,15 @@ import { IChat, IMessage, Input } from './input'
 import aiYuen from './8-SG0FYEmpV2gXW50.png'
 
 const getChat = async (): Promise<IChat> => {
-  const res = await fetch(`${process.env.ServerUrl}/api/chat`, {
-    method: 'GET'
+  const res = await fetch(`${process.env.ServerUrl}/api/history`, {
+    method: 'POST'
   })
 
-  return res.json()
+  const r = await res.json()
+
+  console.log(r)
+
+  return r
 }
 
 export default async function Home() {
@@ -30,9 +34,9 @@ export default async function Home() {
         after:dark:opacity-40 before:lg:h-[360px]"
       >
         <div className="grid gap-y-8 content-start">
-          {chat.messages.map(message => (
+          {/* {chat?.messages?.map(message => (
             <Message message={message}></Message>
-          ))}
+          ))} */}
         </div>
         <Divider className="my-4" />
         <div className="w-full ease-in-out bottom-0 space-y-1">
