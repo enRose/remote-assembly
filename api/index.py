@@ -7,9 +7,11 @@ import chromadb
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 import warnings
 import numpy as np
-
+from openai import OpenAI
 
 load_dotenv()
+
+client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
 app = Flask(__name__)
 
